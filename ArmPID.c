@@ -71,11 +71,11 @@ int PID(struct jointData*p_input)
   else
   	p_input->errorIntegral = 0;
 
-  //finds the change in the error
-  int derivative = p_input->curError - p_input->prevError;
+  //finds the change in the error [DISABLED]
+  //int derivative = p_input->curError - p_input->prevError;
 
   //calculates the suggest power
-	int suggestedPower = (Kp * p_input->curError) + (Ki * p_input->errorIntegral) + (Kd * derivative);
+	int suggestedPower = (Kp * p_input->curError) + (Ki * p_input->errorIntegral); //+ (Kd * derivative);
 
 	//makes sure power is with in [-127, 127]
 	if(suggestedPower > PID_DRIVE_MAX)
