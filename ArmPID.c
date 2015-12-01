@@ -19,12 +19,12 @@ float refreshrate = 60.0;
 int period = (1/refreshrate) * 1000; //computes period in milliseconds
 
 //PID constants
-float Kp = 2.0;
-float Ki = .04;
+float Kp = 40.0;
+float Ki = 0.0;
 float Kd = 0.0;
 
 //temporary variable for setting the target value through the debugger
-int targetValue = 125;
+int targetValue = 40;
 
 //defines the jointData struct, the data structure that holds information about a joint
 typedef struct
