@@ -18,10 +18,11 @@ Built to function with potentiometers and VEX 393 motors.
 float refreshrate = 60.0;
 int period = (1/refreshrate) * 1000; //computes period in milliseconds
 
+//oscillation acheived at Kc of 40.0
 //PID constants
-float Kp = 40.0;
-float Ki = 0.0;
-float Kd = 0.0;
+float Kc = 40.0;
+float Ti = 0.0;
+float Td = 0.0;
 
 //temporary variable for setting the target value through the debugger
 int targetValue = 40;
@@ -67,15 +68,14 @@ int PID(struct jointData*p_input)
 
 	//integrates the error if the jont is within the integral range
   if( abs(p_input->curError) < PID_INTEGRAL_LIMIT )
-  	p_input->errorIntegral += p_input->curError;
+  	p_input->errorIntegral += (p_input->curError*period)/1000;
   else
   	p_input->errorIntegral = 0;
 
-  //finds the change in the error [DISABLED]
-  //int derivative = p_input->curError - p_input->prevError;
+  int derivative = (1000*(p_input->curError - p_input->prevError)/period);
 
   //calculates the suggest power
-	int suggestedPower = (Kp * p_input->curError) + (Ki * p_input->errorIntegral); //+ (Kd * derivative);
+	int suggestedPower = Kc*(p_input->curError + (1/Ti * p_input->errorIntegral) + (Td * derivative)); //+ (Kd * derivative);
 
 	//makes sure power is with in [-127, 127]
 	if(suggestedPower > PID_DRIVE_MAX)
