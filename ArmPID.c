@@ -18,14 +18,16 @@ Built to function with potentiometers and VEX 393 motors.
 float refreshrate = 60.0;
 int period = (1/refreshrate) * 1000; //computes period in milliseconds
 
-//oscillation acheived at Kc of 40.0
+//computed with Zeigler-Nichols method
+float Ku = 40.0;
+float Pu = 1.7;
 //PID constants
-float Kc = 40.0;
-float Ti = 0.0;
-float Td = 0.0;
+float Kc = Ku/1.7;
+float Ti = Pu/2.0;
+float Td = Pu/8;
 
 //temporary variable for setting the target value through the debugger
-int targetValue = 40;
+int targetValue = 10;
 
 //defines the jointData struct, the data structure that holds information about a joint
 typedef struct
@@ -75,7 +77,7 @@ int PID(struct jointData*p_input)
   int derivative = (1000*(p_input->curError - p_input->prevError)/period);
 
   //calculates the suggest power
-	int suggestedPower = Kc*(p_input->curError + (1/Ti * p_input->errorIntegral) + (Td * derivative)); //+ (Kd * derivative);
+	int suggestedPower = Kc*(p_input->curError + (1/Ti * p_input->errorIntegral) + (Td * derivative));
 
 	//makes sure power is with in [-127, 127]
 	if(suggestedPower > PID_DRIVE_MAX)
@@ -95,7 +97,7 @@ void updateTarget(struct jointData*p_input){
 
 task main()
 {
-	//declare and initialize firstJoint data structures
+	//declare and initialize jointData structs
 	struct jointData firstJoint;
 	jointDataSetup(&firstJoint, firstjointsensor, firstjointmotor);
 
@@ -113,7 +115,3 @@ task main()
 		while(time1[T1]<period){}
  }//close while
 }//close task main()
-
-/*
-	Written by Jason Paximadas 11/19/2015 16:58
-*/
