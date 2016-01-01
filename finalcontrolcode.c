@@ -44,13 +44,13 @@ void ballArrUp(bool isThereBall){
 
 task leftSpineRotate(){
 	display="rotating motors";
-  setMotor(leftSpine,100);
+	setMotor(leftSpine,100);
 	while(true){
 		if(SensorValue[leftSpineSW]==1){
 			stopMotor(leftSpine);
 			break;
 		}
-    EndTimeSlice();
+		EndTimeSlice();
 	}
 }
 
@@ -61,7 +61,7 @@ task rightSpineRotate(){
 			stopMotor(leftSpine);
 			break;
 		}
-    EndTimeSlice();
+		EndTimeSlice();
 	}
 }
 
@@ -83,18 +83,18 @@ task positionTracking(){
 }
 
 task aimBot(){
-	//turn robot to the goal and shoot
+//turn robot to the goal and shoot
 }
 */
 
 task driverInputHandler(){
 	while(true){
 		//set up manual controls here
-	  //set up call to aimbot here and shutdown of driver controlled movement
+		//set up call to aimbot here and shutdown of driver controlled movement
 		if(driverMovement){
 			setMotor( rightForward, vexRT(Ch2) );
-		  setMotor( rightRear , vexRT(Ch2) );
-		  setMotor( leftForward , vexRT(Ch3) );
+			setMotor( rightRear , vexRT(Ch2) );
+			setMotor( leftForward , vexRT(Ch3) );
 			setMotor( leftRear , vexRT(Ch3) );
 		}
 		EndTimeSlice();
@@ -118,14 +118,15 @@ task lcdDisplay(){
 	}
 }
 
-task ballManager(){
+task ballHandler(){
 	while(true){
 
 		//check if top space of spine is full
 		if(ballArr[3]){
 			needIntake=false;
 			//display="Stopping intake";
-		}else needIntake=true;
+		}
+		else needIntake=true;
 
 		if(needIntake){ //start the rollers and wait for ball
 			//display="Starting rollers";
@@ -137,10 +138,12 @@ task ballManager(){
 				while(SensorValue[ballSW]==1){}
 				//ballArrUp(true); //update the ballArray while indicating there is a ball coming in
 				display="Done";
-			}else{
+			}
+			else{
 				EndTimeSlice();
 			}
-		}else{ //what to do if intake is not needed
+		}
+		else{ //what to do if intake is not needed
 			stopMotor(intake); //maybe replace this later with code that runs intake in reverse then stops to clear any balls
 			EndTimeSlice();
 		}
@@ -152,8 +155,8 @@ task main(){
 	//startTask(positionTracker)
 	startTask(lcdDisplay);
 	startTask(driverInputHandler);
-	startTask(ballManager);
+	startTask(ballHandler);
 	while(true){
-  EndTimeSlice();
+		EndTimeSlice();
 	}
 }
