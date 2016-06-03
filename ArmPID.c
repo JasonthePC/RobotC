@@ -6,7 +6,7 @@
 
 /*
 Description:
-Proportoinal Integral Derivative control for robotic arm joints.
+Proportional Integral Derivative control for robotic arm joints.
 Built to function with potentiometers and VEX 393 motors.
 */
 
